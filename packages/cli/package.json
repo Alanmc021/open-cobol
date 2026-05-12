@@ -1,0 +1,50 @@
+{
+  "name": "opencobol-ai",
+  "version": "0.1.2",
+  "description": "Ask questions about your legacy COBOL systems using semantic search and AI",
+  "type": "module",
+  "bin": {
+    "opencobol": "./bin/opencobol.js"
+  },
+  "files": [
+    "bin/",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "build:types": "tsc --noEmit",
+    "dev": "tsx src/index.ts",
+    "prepublishOnly": "pnpm build"
+  },
+  "dependencies": {
+    "@inquirer/prompts": "^7.5.0",
+    "@langchain/core": "^0.3.0",
+    "@langchain/langgraph": "^0.2.0",
+    "@langchain/openai": "^0.3.0",
+    "@qdrant/js-client-rest": "^1.13.0",
+    "chalk": "^5.3.0",
+    "commander": "^12.1.0",
+    "dotenv": "^17.4.2",
+    "openai": "^4.77.0",
+    "ora": "^8.1.0"
+  },
+  "devDependencies": {
+    "@opencobol/ai-runtime": "workspace:*",
+    "@opencobol/parser-core": "workspace:*",
+    "@opencobol/rag-engine": "workspace:*",
+    "@opencobol/shared": "workspace:*",
+    "tsup": "^8.5.1",
+    "typescript": "*"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "cobol",
+    "legacy",
+    "modernization",
+    "ai",
+    "cli"
+  ],
+  "license": "MIT"
+}

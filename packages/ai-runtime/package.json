@@ -1,0 +1,27 @@
+{
+  "name": "@opencobol/ai-runtime",
+  "version": "0.0.1",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "@langchain/core": "^0.3.0",
+    "@langchain/langgraph": "^0.2.0",
+    "@langchain/openai": "^0.3.0",
+    "@opencobol/parser-core": "workspace:*",
+    "@opencobol/shared": "workspace:*",
+    "openai": "^4.77.0"
+  },
+  "devDependencies": {
+    "typescript": "*"
+  }
+}

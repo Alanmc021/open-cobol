@@ -1,0 +1,26 @@
+node_modules/
+dist/
+.env
+*.env.local
+.DS_Store
+
+# Build artifacts
+packages/*/dist/
+apps/*/dist/
+services/*/dist/
+
+# Test coverage
+coverage/
+.vitest-cache/
+
+# Infra
+*.tfstate
+*.tfstate.backup
+.terraform/
+
+# IDE
+.vscode/
+.idea/
+
+# Local assistant settings
+.claude/

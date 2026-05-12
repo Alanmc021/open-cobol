@@ -32,7 +32,7 @@ export function Navbar() {
 
         <div className="hidden items-center gap-3 md:flex">
           <a
-            href="https://github.com"
+            href="https://github.com/Alanmc021/open-cobol"
             target="_blank"
             rel="noopener noreferrer"
             className="rounded-lg border border-white/10 px-4 py-2 text-sm text-muted transition-colors hover:border-primary/40 hover:text-primary"

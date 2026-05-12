@@ -79,7 +79,7 @@ async function validateApiKey(apiKey) {
   }
 }
 var initCommand = new Command("init").description("Configure OpenCobol AI interactively").action(async () => {
-  printBanner("0.1.2");
+  printBanner("0.1.3");
   console.log(chalk.dim("  Setup Wizard \u2014 configure your environment in under a minute.\n"));
   const config = {};
   const apiKey = await password({

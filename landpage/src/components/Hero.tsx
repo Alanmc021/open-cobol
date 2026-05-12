@@ -18,9 +18,30 @@ export function Hero() {
 
       <div className="relative mx-auto max-w-7xl px-6">
         <div className="mx-auto max-w-3xl text-center">
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm text-primary">
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm text-primary">
             <span className="h-1.5 w-1.5 rounded-full bg-accent" />
             Open source · CLI-first · AI-powered
+          </div>
+
+          <div className="mb-6 flex items-center justify-center gap-1.5 text-xs text-muted">
+            <span>by</span>
+            <a
+              href="https://github.com/Alanmc021"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold text-gray-300 transition-colors hover:text-primary"
+            >
+              Alan Martins
+            </a>
+            <span>·</span>
+            <a
+              href="https://github.com/Alanmc021/open-cobol"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="transition-colors hover:text-primary"
+            >
+              @Alanmc021/open-cobol
+            </a>
           </div>
 
           <h1 className="mb-6 text-5xl font-extrabold leading-tight tracking-tight text-white md:text-6xl lg:text-7xl">
@@ -53,7 +74,7 @@ export function Hero() {
               </svg>
             </a>
             <a
-              href="https://github.com"
+              href="https://github.com/Alanmc021/open-cobol"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-8 py-3.5 text-base font-semibold text-muted transition-colors hover:border-primary/30 hover:text-primary"

@@ -46,7 +46,7 @@ async function validateApiKey(apiKey: string): Promise<boolean> {
 export const initCommand = new Command('init')
   .description('Configure OpenCobol AI interactively')
   .action(async () => {
-    printBanner('0.1.2')
+    printBanner('0.1.3')
 
     console.log(chalk.dim('  Setup Wizard — configure your environment in under a minute.\n'))
 

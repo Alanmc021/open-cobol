@@ -24,7 +24,7 @@ export function CTA() {
                 npm install -g opencobol
               </div>
               <a
-                href="https://github.com"
+                href="https://github.com/Alanmc021/open-cobol"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-6 py-3 text-sm font-semibold text-muted transition-colors hover:border-primary/30 hover:text-primary"

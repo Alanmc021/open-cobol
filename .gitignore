@@ -24,3 +24,6 @@ coverage/
 
 # Local assistant settings
 .claude/
+
+# Temporary e2e output directories
+tmp-e2e-*/

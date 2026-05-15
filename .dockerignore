@@ -1,0 +1,8 @@
+**/node_modules
+**/.git
+**/dist
+**/*.tsbuildinfo
+**/.env
+**/coverage
+**/.vscode
+apps/vscode-extension

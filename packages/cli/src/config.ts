@@ -7,6 +7,8 @@ export interface OpenCobolConfig {
   model?: string
   qdrantUrl?: string
   qdrantCollection?: string
+  langsmithApiKey?: string
+  langsmithProject?: string
 }
 
 const CONFIG_DIR = join(homedir(), '.opencobol')
@@ -24,6 +26,8 @@ export function loadConfig(): OpenCobolConfig {
     model: process.env['OPENAI_MODEL'] ?? fileConfig.model,
     qdrantUrl: process.env['QDRANT_URL'] ?? fileConfig.qdrantUrl,
     qdrantCollection: process.env['QDRANT_COLLECTION'] ?? fileConfig.qdrantCollection,
+    langsmithApiKey: process.env['LANGCHAIN_API_KEY'] ?? fileConfig.langsmithApiKey,
+    langsmithProject: process.env['LANGCHAIN_PROJECT'] ?? fileConfig.langsmithProject,
   }
 }
 
@@ -45,6 +49,11 @@ export function applyConfig(): void {
   }
   if (config.qdrantCollection && !process.env['QDRANT_COLLECTION']) {
     process.env['QDRANT_COLLECTION'] = config.qdrantCollection
+  }
+  if (config.langsmithApiKey && !process.env['LANGCHAIN_API_KEY']) {
+    process.env['LANGCHAIN_API_KEY'] = config.langsmithApiKey
+    process.env['LANGCHAIN_TRACING_V2'] = 'true'
+    process.env['LANGCHAIN_PROJECT'] = config.langsmithProject ?? 'opencobol-ai'
   }
 }
 

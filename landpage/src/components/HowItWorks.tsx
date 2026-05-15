@@ -14,14 +14,14 @@ const steps = [
   {
     n: '03',
     title: 'Index your codebase',
-    body: 'Parse, chunk and embed every COBOL program and copybook.',
-    cmd: 'opencobol embed ./legacy',
+    body: 'Point at your COBOL folder — or just run from inside it. Parses every program, copybook and DATA DIVISION variable.',
+    cmd: 'opencobol embed',
   },
   {
     n: '04',
-    title: 'Start asking questions',
-    body: 'Chat with your system in plain English, right in the terminal.',
-    cmd: 'opencobol ask "What does PAYROLL do?"',
+    title: 'Get a full report',
+    body: 'One command runs the full orchestrated pipeline: scan, dependencies, AI explanations and a Markdown report.',
+    cmd: 'opencobol analyze',
   },
 ]
 

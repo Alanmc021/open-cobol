@@ -23,7 +23,7 @@ export class QdrantStore {
   private collection: string
 
   constructor(url: string, collection = 'opencobol') {
-    this.client = new QdrantClient({ url })
+    this.client = new QdrantClient({ url, checkCompatibility: false })
     this.collection = collection
   }
 

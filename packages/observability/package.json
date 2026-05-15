@@ -1,0 +1,19 @@
+{
+  "name": "@opencobol/observability",
+  "version": "0.0.1",
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "langsmith": "^0.2.0"
+  },
+  "devDependencies": {
+    "@opencobol/shared": "workspace:*",
+    "typescript": "*"
+  }
+}

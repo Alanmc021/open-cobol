@@ -2,10 +2,11 @@ const commands = [
   { cmd: 'init', desc: 'Configure API key, Qdrant endpoint and project settings', phase: 'Setup' },
   { cmd: 'scan', desc: 'Detect COBOL files, parse COPY statements and map call graph', phase: 'Analysis' },
   { cmd: 'flow', desc: 'Show execution flow of a program in readable textual form', phase: 'Analysis' },
-  { cmd: 'embed', desc: 'Chunk, embed and index the codebase into Qdrant', phase: 'RAG' },
+  { cmd: 'embed', desc: 'Chunk, embed and index the codebase into Qdrant — run from any directory, no path required', phase: 'RAG' },
   { cmd: 'ask', desc: 'Semantic chat — ask any question about your system', phase: 'RAG' },
-  { cmd: 'explain', desc: 'AI explanation of a single file with business rules', phase: 'AI' },
+  { cmd: 'explain', desc: 'AI explanation of a single file with business rules and DATA DIVISION variables', phase: 'AI' },
   { cmd: 'deps', desc: 'Generate dependency graph across all programs', phase: 'AI' },
+  { cmd: 'analyze', desc: 'Full orchestrated analysis: scan → deps → explain → report. One command, complete Markdown output', phase: 'Orchestrator' },
   { cmd: 'generate-docs', desc: 'Output full Markdown documentation for a program or project', phase: 'AI' },
   { cmd: 'modernize', desc: 'Generate migration plan to a modern language', phase: 'AI' },
   { cmd: 'architecture', desc: 'Produce high-level architecture diagram from static analysis', phase: 'AI' },
@@ -16,6 +17,7 @@ const phaseColor: Record<string, string> = {
   Analysis: 'text-blue-400 bg-blue-400/10 border-blue-400/20',
   RAG: 'text-primary bg-primary/10 border-primary/20',
   AI: 'text-accent bg-accent/10 border-accent/20',
+  Orchestrator: 'text-purple-400 bg-purple-400/10 border-purple-400/20',
 }
 
 export function Commands() {

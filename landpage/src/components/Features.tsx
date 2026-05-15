@@ -6,18 +6,18 @@ const features = [
   },
   {
     icon: '🧩',
-    title: 'COBOL aware',
-    body: 'Understands PROGRAM-ID, COPY, CALL, PERFORM, DATA DIVISION and more — not just plain text search.',
+    title: 'Deep COBOL parser',
+    body: 'Parses DATA DIVISION variables — field names, PIC types, COMP-3 usage, WORKING-STORAGE and LINKAGE sections. Not just text search.',
   },
   {
     icon: '⚡',
     title: 'CLI first',
-    body: 'No browser, no account, no setup friction. Run directly in your terminal, pipe output anywhere.',
+    body: 'No browser, no account, no setup friction. Point at any folder and run — no path argument required.',
   },
   {
-    icon: '✈️',
-    title: 'Offline tools',
-    body: "`scan` and `flow` work without an internet connection or API key — just local COBOL parsing.",
+    icon: '🤖',
+    title: 'Multi-agent orchestrator',
+    body: 'One command (`analyze`) coordinates scan → dependency analysis → AI explanation → full Markdown report automatically.',
   },
   {
     icon: '📊',

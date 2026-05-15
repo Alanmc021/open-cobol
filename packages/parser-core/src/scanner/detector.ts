@@ -1,6 +1,7 @@
 import { readFileSync, statSync } from 'node:fs'
 import { extname, basename } from 'node:path'
 import type { CobolFile, CobolFileType } from '@opencobol/shared'
+import { parseDataDivisionFromSource } from './data-division.js'
 
 const PROGRAM_EXTENSIONS = new Set(['.cbl', '.cob', '.cobol'])
 const COPYBOOK_EXTENSIONS = new Set(['.cpy', '.copy'])
@@ -60,7 +61,7 @@ export function analyzeFile(filePath: string): CobolFile {
     }
   }
 
-  return {
+  const base = {
     path: filePath,
     name: basename(filePath),
     type,
@@ -70,4 +71,9 @@ export function analyzeFile(filePath: string): CobolFile {
     lines: content.split('\n').length,
     sizeBytes: stat.size,
   }
+
+  if (type === 'program' || type === 'copybook') {
+    return { ...base, dataDivision: parseDataDivisionFromSource(content) }
+  }
+  return base
 }

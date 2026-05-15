@@ -25,22 +25,54 @@ function chunkId(filePath: string, descriptor: string): string {
   return `${a}-${b.slice(0, 4)}-4${b.slice(4, 7)}-8${a.slice(0, 3)}-${b}${a.slice(0, 4)}`
 }
 
+// Conservative token estimate: 4 chars ≈ 1 token (safe for COBOL fixed-format)
+const MAX_CHUNK_TOKENS = 6000
+const CHARS_PER_TOKEN = 4
+
+function estimateTokens(text: string): number {
+  return Math.ceil(text.length / CHARS_PER_TOKEN)
+}
+
+// Split oversized content into sub-chunks at line boundaries
+function splitIntoSubChunks(lines: string[], maxTokens: number): string[] {
+  const chunks: string[] = []
+  let current: string[] = []
+  let currentTokens = 0
+
+  for (const line of lines) {
+    const lineTokens = estimateTokens(line)
+    if (currentTokens + lineTokens > maxTokens && current.length > 0) {
+      chunks.push(current.join('\n'))
+      current = []
+      currentTokens = 0
+    }
+    current.push(line)
+    currentTokens += lineTokens
+  }
+  if (current.length > 0) chunks.push(current.join('\n'))
+  return chunks
+}
+
 function buildProgramHeader(filePath: string, sourceLines: string[]): string {
   const meta = analyzeFile(filePath)
-  const headerLines = sourceLines
-    .slice(0, sourceLines.findIndex((l) => /\bPROCEDURE\s+DIVISION\b/i.test(l)) + 1)
+  const procIdx = sourceLines.findIndex((l) => /\bPROCEDURE\s+DIVISION\b/i.test(l))
+
+  // Limit header to metadata + first 150 lines of DATA DIVISION to stay under token limit
+  const dataDivLines = sourceLines
+    .slice(0, procIdx + 1)
     .filter((l) => l.trim() && l[6] !== '*')
-    .join('\n')
-    .trim()
+  const cappedLines = dataDivLines.slice(0, 150)
+  const truncated = dataDivLines.length > 150
 
   return [
     `[COBOL Program: ${meta.programId ?? basename(filePath)}]`,
     `File: ${basename(filePath)}`,
     `Copybooks: ${meta.copybooks.join(', ') || 'none'}`,
     `External calls: ${meta.calls.join(', ') || 'none'}`,
+    truncated ? `[DATA DIVISION truncated at 150 lines — ${dataDivLines.length} total]` : '',
     '',
-    headerLines,
-  ].join('\n')
+    cappedLines.join('\n').trim(),
+  ].filter((l) => l !== '').join('\n')
 }
 
 function extractParagraphSource(sourceLines: string[], lineStart: number, lineEnd: number): string {
@@ -151,7 +183,7 @@ function chunkProgramFile(filePath: string): CobolChunk[] {
     },
   })
 
-  // Chunk per paragraph
+  // Chunk per paragraph — split oversized paragraphs into sub-chunks
   const procOffset = sourceLines.findIndex((l) => /\bPROCEDURE\s+DIVISION\b/i.test(l)) + 1
 
   for (const para of flow.paragraphs) {
@@ -159,29 +191,54 @@ function chunkProgramFile(filePath: string): CobolChunk[] {
     const absEnd = procOffset + para.lineEnd
     const code = extractParagraphSource(sourceLines, absStart, absEnd)
 
-    const content = [
+    const header = [
       `[COBOL Program: ${meta.programId ?? basename(filePath)} | Paragraph: ${para.name}]`,
       `Performs: ${para.performs.join(', ') || 'none'}`,
       `Calls: ${para.calls.join(', ') || 'none'}`,
       '',
-      code,
     ].join('\n')
 
-    chunks.push({
-      id: chunkId(filePath, `para::${para.name}`),
-      content,
-      payload: {
-        file: basename(filePath),
-        programId: meta.programId,
-        chunkType: 'paragraph',
-        paragraphName: para.name,
-        performs: para.performs,
-        calls: para.calls,
-        content,
-        lineStart: absStart,
-        lineEnd: absEnd,
-      },
-    })
+    const fullContent = header + code
+
+    if (estimateTokens(fullContent) <= MAX_CHUNK_TOKENS) {
+      chunks.push({
+        id: chunkId(filePath, `para::${para.name}`),
+        content: fullContent,
+        payload: {
+          file: basename(filePath),
+          programId: meta.programId,
+          chunkType: 'paragraph',
+          paragraphName: para.name,
+          performs: para.performs,
+          calls: para.calls,
+          content: fullContent,
+          lineStart: absStart,
+          lineEnd: absEnd,
+        },
+      })
+    } else {
+      // Oversized paragraph → split into sub-chunks
+      const codeLines = code.split('\n')
+      const subChunks = splitIntoSubChunks(codeLines, MAX_CHUNK_TOKENS - estimateTokens(header))
+      subChunks.forEach((sub, idx) => {
+        const content = header + sub
+        chunks.push({
+          id: chunkId(filePath, `para::${para.name}::${idx}`),
+          content,
+          payload: {
+            file: basename(filePath),
+            programId: meta.programId,
+            chunkType: 'paragraph',
+            paragraphName: `${para.name} (part ${idx + 1}/${subChunks.length})`,
+            performs: para.performs,
+            calls: para.calls,
+            content,
+            lineStart: absStart,
+            lineEnd: absEnd,
+          },
+        })
+      })
+    }
   }
 
   return chunks

@@ -1,0 +1,170 @@
+{
+  "name": "opencobol-ai",
+  "displayName": "OpenCobol AI",
+  "description": "Ask questions about your legacy COBOL systems using semantic search and AI",
+  "version": "0.1.0",
+  "publisher": "opencobol",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "AI",
+    "Programming Languages",
+    "Other"
+  ],
+  "keywords": [
+    "cobol",
+    "legacy",
+    "mainframe",
+    "ai",
+    "rag"
+  ],
+  "icon": "assets/icon.png",
+  "activationEvents": [
+    "onLanguage:cobol",
+    "workspaceContains:**/*.cbl",
+    "workspaceContains:**/*.cob",
+    "workspaceContains:**/*.cpy",
+    "workspaceContains:**/*.jcl"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "opencobol.explain",
+        "title": "OpenCobol: Explain this Program",
+        "category": "OpenCobol AI"
+      },
+      {
+        "command": "opencobol.docs",
+        "title": "OpenCobol: Generate Documentation",
+        "category": "OpenCobol AI"
+      },
+      {
+        "command": "opencobol.flow",
+        "title": "OpenCobol: Show Execution Flow",
+        "category": "OpenCobol AI"
+      },
+      {
+        "command": "opencobol.modernize",
+        "title": "OpenCobol: Generate Modernization Plan",
+        "category": "OpenCobol AI"
+      },
+      {
+        "command": "opencobol.embedWorkspace",
+        "title": "OpenCobol: Index Workspace for Semantic Search",
+        "category": "OpenCobol AI"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "when": "resourceExtname =~ /\\.(cbl|cob|cpy|CBL|COB)$/",
+          "command": "opencobol.explain",
+          "group": "opencobol@1"
+        },
+        {
+          "when": "resourceExtname =~ /\\.(cbl|cob|CBL|COB)$/",
+          "command": "opencobol.docs",
+          "group": "opencobol@2"
+        },
+        {
+          "when": "resourceExtname =~ /\\.(cbl|cob|CBL|COB)$/",
+          "command": "opencobol.flow",
+          "group": "opencobol@3"
+        },
+        {
+          "when": "resourceExtname =~ /\\.(cbl|cob|CBL|COB)$/",
+          "command": "opencobol.modernize",
+          "group": "opencobol@4"
+        }
+      ],
+      "editor/context": [
+        {
+          "when": "resourceExtname =~ /\\.(cbl|cob|cpy|CBL|COB)$/",
+          "command": "opencobol.explain",
+          "group": "opencobol@1"
+        },
+        {
+          "when": "resourceExtname =~ /\\.(cbl|cob|CBL|COB)$/",
+          "command": "opencobol.docs",
+          "group": "opencobol@2"
+        },
+        {
+          "when": "resourceExtname =~ /\\.(cbl|cob|CBL|COB)$/",
+          "command": "opencobol.flow",
+          "group": "opencobol@3"
+        }
+      ]
+    },
+    "chatParticipants": [
+      {
+        "id": "opencobol.chat",
+        "fullName": "OpenCobol AI",
+        "name": "opencobol",
+        "description": "Ask questions about your COBOL codebase using semantic search",
+        "isSticky": true
+      }
+    ],
+    "configuration": {
+      "title": "OpenCobol AI",
+      "properties": {
+        "opencobol.openaiApiKey": {
+          "type": "string",
+          "default": "",
+          "description": "OpenAI API Key (or set OPENAI_API_KEY env var)"
+        },
+        "opencobol.model": {
+          "type": "string",
+          "default": "gpt-4o-mini",
+          "enum": ["gpt-4o-mini", "gpt-4o", "gpt-4-turbo"],
+          "description": "OpenAI model to use"
+        },
+        "opencobol.qdrantUrl": {
+          "type": "string",
+          "default": "http://localhost:6333",
+          "description": "Qdrant vector database URL"
+        },
+        "opencobol.qdrantCollection": {
+          "type": "string",
+          "default": "opencobol",
+          "description": "Qdrant collection name"
+        }
+      }
+    },
+    "languages": [
+      {
+        "id": "cobol",
+        "aliases": ["COBOL", "cobol"],
+        "extensions": [".cbl", ".cob", ".cobol", ".CBL", ".COB"],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "cobol",
+        "scopeName": "source.cobol",
+        "path": "./syntaxes/cobol.tmLanguage.json"
+      }
+    ]
+  },
+  "scripts": {
+    "build": "esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --platform=node --target=node20 --format=cjs --sourcemap",
+    "watch": "npm run build -- --watch",
+    "package": "vsce package",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@opencobol/ai-runtime": "workspace:*",
+    "@opencobol/parser-core": "workspace:*",
+    "@opencobol/rag-engine": "workspace:*",
+    "@opencobol/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.90.0",
+    "@vscode/vsce": "^2.24.0",
+    "esbuild": "^0.21.0",
+    "typescript": "*"
+  }
+}

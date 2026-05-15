@@ -1,5 +1,5 @@
 import OpenAI from 'openai'
-import type { AIProvider, CompletionOptions, StreamChunk } from './base.js'
+import type { AIProvider, ChatMessage, CompletionOptions, StreamChunk } from './base.js'
 
 export class OpenAIProvider implements AIProvider {
   private client: OpenAI
@@ -12,12 +12,19 @@ export class OpenAIProvider implements AIProvider {
     prompt: string,
     options: CompletionOptions = {},
   ): AsyncIterable<StreamChunk> {
+    yield* this.streamChat([{ role: 'user', content: prompt }], options)
+  }
+
+  async *streamChat(
+    messages: ChatMessage[],
+    options: CompletionOptions = {},
+  ): AsyncIterable<StreamChunk> {
     const stream = await this.client.chat.completions.create({
       model: options.model ?? 'gpt-4o',
       temperature: options.temperature ?? 0.2,
       max_tokens: options.maxTokens ?? 2048,
       stream: true,
-      messages: [{ role: 'user', content: prompt }],
+      messages,
     })
 
     for await (const chunk of stream) {

@@ -1,32 +1,27 @@
 const lines = [
-  { type: 'prompt', text: 'opencobol ask "Como funciona o sistema?"' },
+  { type: 'prompt', text: 'opencobol analyze' },
   { type: 'blank', text: '' },
-  { type: 'label', text: '⚡ Searching 847 chunks across 3 programs...' },
+  { type: 'label', text: '  ⠿  Scanning COBOL files…' },
+  { type: 'label', text: '  ⠿  Analyzing dependencies…' },
+  { type: 'label', text: '  ⠿  Explaining programs with AI…' },
+  { type: 'label', text: '  ⠿  Assembling report…' },
   { type: 'blank', text: '' },
-  {
-    type: 'context',
-    text: 'Context retrieved from: PAYROLL.cbl · CUSTOMER.cbl · INVENTORY.cbl',
-  },
+  { type: 'success', text: '  ✔ Analysis complete' },
   { type: 'blank', text: '' },
-  { type: 'heading', text: 'PAYROLL.cbl' },
-  {
-    type: 'body',
-    text: 'Processes employee payroll by calculating gross pay, deductions, taxes and net salary. Outputs payslips and updates EMPDATA table.',
-  },
+  { type: 'heading', text: '# OpenCobol Analysis Report' },
   { type: 'blank', text: '' },
-  { type: 'heading', text: 'CUSTOMER.cbl' },
-  {
-    type: 'body',
-    text: 'Manages customer accounts: creation, updates, balance reconciliation and statement generation via CUSTFILE.',
-  },
+  { type: 'context', text: '## Summary' },
+  { type: 'body', text: '| Programs | 3 |  | Copybooks | 4 |  | Total lines | 1,240 |' },
   { type: 'blank', text: '' },
-  { type: 'heading', text: 'INVENTORY.cbl' },
-  {
-    type: 'body',
-    text: 'Monitors stock levels, handles reorder triggers and writes alerts to the INVLOG file when thresholds are crossed.',
-  },
+  { type: 'context', text: '## Call Dependencies' },
+  { type: 'body', text: '· DBACCESS  ← called by: PAYROLL.cbl, CUSTOMER.cbl, INVENTORY.cbl' },
+  { type: 'body', text: '· TAX-SERVICE  ← called by: PAYROLL.cbl' },
   { type: 'blank', text: '' },
-  { type: 'footer', text: '847 tokens · 3 sources · 1.4s' },
+  { type: 'context', text: '## Program Explanations' },
+  { type: 'body', text: '### PAYROLL.cbl  —  Processes gross pay, tax deductions and net salary.' },
+  { type: 'body', text: '### CUSTOMER.cbl  —  Manages accounts, balance reconciliation and status.' },
+  { type: 'blank', text: '' },
+  { type: 'footer', text: '  Report saved to opencobol-report.md · 3 programs · 4.2s' },
 ]
 
 export function TerminalDemo() {
@@ -41,7 +36,7 @@ export function TerminalDemo() {
             See it in action
           </h2>
           <p className="mt-4 text-muted">
-            Ask any question about your COBOL codebase and get a grounded, source-cited answer.
+            One command orchestrates the full pipeline — scan, dependencies, AI explanations and a complete Markdown report.
           </p>
         </div>
 
@@ -52,7 +47,7 @@ export function TerminalDemo() {
               <span className="h-3 w-3 rounded-full bg-yellow-500/70" />
               <span className="h-3 w-3 rounded-full bg-green-500/70" />
             </div>
-            <span className="text-xs text-muted font-mono">opencobol — ask</span>
+            <span className="text-xs text-muted font-mono">opencobol — analyze</span>
             <div className="w-16" />
           </div>
 
@@ -70,6 +65,13 @@ export function TerminalDemo() {
               if (line.type === 'label') {
                 return (
                   <p key={i} className="text-primary text-xs">
+                    {line.text}
+                  </p>
+                )
+              }
+              if (line.type === 'success') {
+                return (
+                  <p key={i} className="text-green-400 text-sm font-semibold">
                     {line.text}
                   </p>
                 )

@@ -4,23 +4,14 @@ import chalk from 'chalk'
 import ora from 'ora'
 import { saveConfig, CONFIG_PATH, type OpenCobolConfig } from '../config.js'
 
-const LOGO = `
-  ██████╗  ██████╗ ███████╗██████╗  ██████╗ ██╗
- ██╔════╝ ██╔═══██╗██╔════╝██╔══██╗██╔═══██╗██║
- ██║      ██║   ██║███████╗██████╔╝██║   ██║██║
- ██║      ██║   ██║╚════██║██╔══██╗██║   ██║██║
- ╚██████╗ ╚██████╔╝███████║██████╔╝╚██████╔╝███████╗
-  ╚═════╝  ╚═════╝ ╚══════╝╚═════╝  ╚═════╝╚══════╝
-`
-
 function printBanner(version: string) {
   const width = 56
   const border = chalk.cyan('═'.repeat(width))
   const side = chalk.cyan('║')
 
-  const line = (text: string, pad = true) => {
+  const line = (text: string) => {
     const visible = text.replace(/\x1b\[[0-9;]*m/g, '')
-    const spaces = pad ? ' '.repeat(Math.max(0, width - visible.length - 2)) : ''
+    const spaces = ' '.repeat(Math.max(0, width - visible.length - 2))
     return `${side} ${text}${spaces} ${side}`
   }
 
@@ -46,13 +37,13 @@ async function validateApiKey(apiKey: string): Promise<boolean> {
 export const initCommand = new Command('init')
   .description('Configure OpenCobol AI interactively')
   .action(async () => {
-    printBanner('0.1.3')
+    printBanner('0.1.4')
 
     console.log(chalk.dim('  Setup Wizard — configure your environment in under a minute.\n'))
 
     const config: OpenCobolConfig = {}
 
-    // API Key
+    // ── OpenAI ──────────────────────────────────────────────
     const apiKey = await password({
       message: 'OpenAI API Key',
       mask: '●',
@@ -70,7 +61,6 @@ export const initCommand = new Command('init')
 
     console.log()
 
-    // Model
     config.model = await select({
       message: 'Default model',
       choices: [
@@ -82,7 +72,7 @@ export const initCommand = new Command('init')
 
     console.log()
 
-    // Qdrant
+    // ── Qdrant ───────────────────────────────────────────────
     const useQdrant = await confirm({
       message: 'Enable semantic search with Qdrant? ' + chalk.dim('(needed for embed & ask)'),
       default: true,
@@ -100,12 +90,38 @@ export const initCommand = new Command('init')
       })
     }
 
+    console.log()
+
+    // ── LangSmith ────────────────────────────────────────────
+    const useLangSmith = await confirm({
+      message: 'Enable LangSmith observability? ' + chalk.dim('(traces every AI agent run)'),
+      default: false,
+    })
+
+    if (useLangSmith) {
+      console.log()
+      console.log(chalk.dim('  Get your key at: https://smith.langchain.com → Settings → API Keys\n'))
+      const lsKey = await password({
+        message: 'LangSmith API Key',
+        mask: '●',
+        validate: (v) => (v.startsWith('ls__') && v.length > 10 ? true : 'Key must start with ls__'),
+      })
+      config.langsmithApiKey = lsKey
+      config.langsmithProject = await input({
+        message: 'LangSmith project name',
+        default: 'opencobol-ai',
+      })
+    }
+
     saveConfig(config)
 
     console.log()
     console.log(chalk.cyan('─'.repeat(58)))
     console.log()
     console.log(`  ${chalk.green('✔')}  Config saved to ${chalk.dim(CONFIG_PATH)}`)
+    if (useLangSmith) {
+      console.log(`  ${chalk.green('✔')}  LangSmith tracing enabled — all agent runs will be traced`)
+    }
     console.log()
     console.log(`  ${chalk.bold('Next steps:')}`)
     console.log()

@@ -6,7 +6,8 @@ import { analyzeFile } from '../scanner/detector.js'
 // Paragraph header: area-A indentation (6–8 spaces) + NAME + lone period.
 // COBOL area A = columns 8–11 (1-indexed) = 7–10 (0-indexed), so ~7 leading spaces.
 // Scope terminators like END-IF live in area B (11+ spaces) and are excluded separately.
-const PARA_HEADER_RE = /^[ \t]{6,8}([A-Z][A-Z0-9-]*)\.[ \t]*$/
+// COBOL paragraphs can start with a letter OR digit (e.g. 1200-COMPUTE-INTEREST)
+const PARA_HEADER_RE = /^[ \t]{6,8}([A-Z0-9][A-Z0-9-]*)\.[ \t]*$/
 
 // COBOL scope terminators that can appear at area-A indentation with a trailing period
 const SCOPE_TERMINATORS = new Set([
@@ -45,7 +46,7 @@ const STRUCTURAL_KEYWORDS = new Set([
 
 // PERFORM NAME — captures the target paragraph name
 // Stops at THRU / THROUGH / UNTIL / VARYING / WITH / TIMES
-const PERFORM_RE = /\bPERFORM\s+([A-Z][A-Z0-9-]*)(?:\s+(?:THRU|THROUGH|UNTIL|VARYING|WITH|TIMES)\b)?/gi
+const PERFORM_RE = /\bPERFORM\s+([A-Z0-9][A-Z0-9-]*)(?:\s+(?:THRU|THROUGH|UNTIL|VARYING|WITH|TIMES)\b)?/gi
 
 // CALL 'NAME' or CALL "NAME"
 const CALL_RE = /\bCALL\s+['"]([A-Z0-9][A-Z0-9-]*)['"]|\bCALL\s+([A-Z][A-Z0-9-]*)\b/gi

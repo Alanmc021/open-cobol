@@ -6,10 +6,10 @@ import { renderScanResult } from '../ui/renderer.js'
 
 export const scanCommand = new Command('scan')
   .description('Scan a directory for COBOL files and analyze dependencies')
-  .argument('<path>', 'Directory to scan')
+  .argument('[path]', 'Directory to scan (default: current directory)')
   .option('--json', 'Output raw JSON')
-  .action(async (targetPath: string, options: { json?: boolean }) => {
-    const resolvedPath = resolve(targetPath)
+  .action(async (targetPath: string | undefined, options: { json?: boolean }) => {
+    const resolvedPath = resolve(targetPath ?? '.')
     const spinner = ora(`Scanning ${resolvedPath} …`).start()
 
     try {

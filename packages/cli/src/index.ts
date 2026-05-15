@@ -10,6 +10,10 @@ import { askCommand } from './commands/ask.js'
 import { depsCommand } from './commands/deps.js'
 import { modernizeCommand } from './commands/modernize.js'
 import { docsCommand } from './commands/docs.js'
+import { generateApiCommand } from './commands/generate-api.js'
+import { agentCommand } from './commands/agent.js'
+import { diagramCommand } from './commands/diagram.js'
+import { analyzeCommand } from './commands/analyze.js'
 
 applyConfig()
 
@@ -29,5 +33,9 @@ program.addCommand(askCommand)
 program.addCommand(depsCommand)
 program.addCommand(modernizeCommand)
 program.addCommand(docsCommand)
+program.addCommand(generateApiCommand)
+program.addCommand(agentCommand)
+program.addCommand(diagramCommand)
+program.addCommand(analyzeCommand)
 
 program.parse(process.argv)

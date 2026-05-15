@@ -12,11 +12,11 @@ const LABEL = chalk.bold.white
 
 export const embedCommand = new Command('embed')
   .description('Index a COBOL directory into the vector database for semantic search')
-  .argument('<path>', 'Directory to index')
+  .argument('[path]', 'Directory to index (default: current directory)')
   .option('--qdrant <url>', 'Qdrant URL', 'http://localhost:6333')
   .option('--collection <name>', 'Qdrant collection name', 'opencobol')
-  .action(async (targetPath: string, options: { qdrant: string; collection: string }) => {
-    const resolvedPath = resolve(targetPath)
+  .action(async (targetPath: string | undefined, options: { qdrant: string; collection: string }) => {
+    const resolvedPath = resolve(targetPath ?? '.')
 
     console.log()
     console.log(BRAND('  ██████  OpenCobol AI — Embed'))

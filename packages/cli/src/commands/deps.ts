@@ -18,11 +18,11 @@ function applyMarkdownColors(text: string): string {
 
 export const depsCommand = new Command('deps')
   .description('Analyze inter-program dependencies and produce a migration impact report')
-  .argument('<path>', 'Directory to scan')
+  .argument('[path]', 'Directory to scan (default: current directory)')
   .option('--program <name>', 'Focus on impact of changing a specific program')
   .option('--model <model>', 'OpenAI model', 'gpt-4o')
-  .action(async (targetPath: string, options: { program?: string; model: string }) => {
-    const resolvedPath = resolve(targetPath)
+  .action(async (targetPath: string | undefined, options: { program?: string; model: string }) => {
+    const resolvedPath = resolve(targetPath ?? '.')
 
     console.log()
     console.log(BRAND('  ██████  OpenCobol AI — Dependency Analysis'))

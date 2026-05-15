@@ -1,5 +1,5 @@
 export { indexDirectory } from './indexer.js'
-export { retrieve, buildRagPrompt } from './retriever.js'
+export { retrieve, buildRagPrompt, buildRagSystemPrompt } from './retriever.js'
 export { chunkCobolFile } from './chunker/cobol.js'
 export { QdrantStore } from './store/qdrant.js'
 export { OpenAIEmbeddings } from './providers/embedding/openai.js'

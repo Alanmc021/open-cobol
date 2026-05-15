@@ -1,0 +1,91 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "COBOL",
+  "scopeName": "source.cobol",
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#divisions" },
+    { "include": "#keywords" },
+    { "include": "#strings" },
+    { "include": "#numbers" },
+    { "include": "#operators" }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.cobol",
+          "match": "^.{6}\\*.*$"
+        },
+        {
+          "name": "comment.line.cobol",
+          "match": "^\\s*\\*>.*$"
+        }
+      ]
+    },
+    "divisions": {
+      "patterns": [
+        {
+          "name": "keyword.control.division.cobol",
+          "match": "(?i)\\b(IDENTIFICATION|ENVIRONMENT|DATA|PROCEDURE)\\s+DIVISION\\b"
+        },
+        {
+          "name": "keyword.control.section.cobol",
+          "match": "(?i)\\b(WORKING-STORAGE|FILE|LINKAGE|LOCAL-STORAGE|SCREEN)\\s+SECTION\\b"
+        },
+        {
+          "name": "entity.name.function.cobol",
+          "match": "(?i)^.{6}([A-Z][A-Z0-9-]*)\\s*\\."
+        }
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.cobol",
+          "match": "(?i)\\b(PERFORM|IF|ELSE|END-IF|EVALUATE|WHEN|END-EVALUATE|MOVE|ADD|SUBTRACT|MULTIPLY|DIVIDE|COMPUTE|GO|TO|CALL|STOP|RUN|OPEN|CLOSE|READ|WRITE|REWRITE|DELETE|DISPLAY|ACCEPT|STRING|UNSTRING|INSPECT|INITIALIZE|SORT|MERGE|EXIT|CONTINUE|NEXT|SENTENCE|RETURN|THRU|THROUGH|UNTIL|VARYING|AFTER|TIMES|WITH|TEST|BEFORE)\\b"
+        },
+        {
+          "name": "storage.type.cobol",
+          "match": "(?i)\\b(PIC|PICTURE|COMP|COMPUTATIONAL|BINARY|PACKED-DECIMAL|USAGE|VALUE|OCCURS|DEPENDING|REDEFINES|RENAMES|COPY|REPLACING)\\b"
+        },
+        {
+          "name": "keyword.other.cobol",
+          "match": "(?i)\\b(PROGRAM-ID|AUTHOR|DATE-WRITTEN|ENVIRONMENT|CONFIGURATION|INPUT-OUTPUT|FILE-CONTROL|SELECT|ASSIGN|ORGANIZATION|ACCESS|RECORD|FD|SD|01|05|10|15|20|25|77|88)\\b"
+        },
+        {
+          "name": "support.function.cobol",
+          "match": "(?i)\\b(FUNCTION|LENGTH|UPPER-CASE|LOWER-CASE|NUMVAL|TRIM|CURRENT-DATE|WHEN-COMPILED|INTEGER|MOD|MAX|MIN|SUM|ORD|CHAR)\\b"
+        },
+        {
+          "name": "constant.language.cobol",
+          "match": "(?i)\\b(TRUE|FALSE|ZERO|ZEROS|ZEROES|SPACE|SPACES|HIGH-VALUE|HIGH-VALUES|LOW-VALUE|LOW-VALUES|QUOTE|QUOTES|NULL|NULLS)\\b"
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.cobol",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [{ "name": "constant.character.escape.cobol", "match": "\"\"" }]
+        },
+        {
+          "name": "string.quoted.single.cobol",
+          "begin": "'",
+          "end": "'",
+          "patterns": [{ "name": "constant.character.escape.cobol", "match": "''" }]
+        }
+      ]
+    },
+    "numbers": {
+      "name": "constant.numeric.cobol",
+      "match": "\\b[0-9]+(\\.[0-9]+)?\\b"
+    },
+    "operators": {
+      "name": "keyword.operator.cobol",
+      "match": "(?i)\\b(AND|OR|NOT|EQUAL|GREATER|LESS|THAN)\\b|[+\\-\\*/=><]"
+    }
+  }
+}

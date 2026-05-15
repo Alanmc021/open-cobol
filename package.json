@@ -9,6 +9,8 @@
     "opencobol": "tsx packages/cli/src/index.ts",
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:e2e": "vitest run --config tests/e2e/vitest.config.ts",
+    "test:e2e:ai": "vitest run --config tests/e2e/vitest.config.ts",
     "typecheck": "pnpm -r typecheck",
     "lint": "eslint packages --ext .ts",
     "format": "prettier --write packages"
